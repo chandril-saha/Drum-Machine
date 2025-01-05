@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drum Pad</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+    <style>
+        * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        }
+
+        body {
+        background-color: #121212;
+        color: #ffffff;
+        font-family: 'Arial', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        }
+
+        .container {
+        text-align: center;
+        }
+
+        h1 {
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+        font-family:'Orbitron',sans-serif;
+        letter-spacing: 0.1px;
+        text-shadow:2.5px 2.5px 6px #e7e7e7;
+        }
+
+        .pad-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 2rem;
+        }
+
+        .pad {
+        width: 100px;
+        height: 100px;
+        background-color: #303030;
+        border: 6px solid #e7e7e7;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        font-family:'Digi','Orbitron',sans-serif;
+        letter-spacing: 0.197px;
+        }
+
+        .pad:active {
+        background-color: #f39c12;
+        }
+        @font-face {
+        font-family: 'Digi';
+        src: url('font/digital-7.ttf') format('truetype');
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Virtual Drum Pad</h1>
+
+        <div class="pad-container">
+            <div class="pad" data-key="KeyT">Low Tom (T)</div>
+            <div class="pad" data-key="KeyY">Mid Tom (Y)</div>
+            <div class="pad" data-key="KeyU">High Tom (U)</div>
+        </div>
+        
+        <div class="pad-container">
+            <div class="pad" data-key="KeyG">Kick (G)</div>
+            <div class="pad" data-key="KeyH">Snare (H)</div>
+            <div class="pad" data-key="KeyJ">Closed HH (J)</div>
+        </div>
+
+        <div class="pad-container">
+            <div class="pad" data-key="KeyB">Crash (B)</div>
+            <div class="pad" data-key="KeyN">Ride (N)</div>
+            <div class="pad" data-key="KeyM">Open HH (M)</div>
+        </div>
+
+        <audio id="kick" src="sounds/kick.mp3"></audio>
+        <audio id="snare" src="sounds/snare.mp3"></audio>
+        <audio id="hihat" src="sounds/closedhat.mp3"></audio>
+        <audio id="openhat" src="sounds/openhat.mp3"></audio>
+        <audio id="crash" src="sounds/crash.mp3"></audio>
+        <audio id="ride" src="sounds/ride.mp3"></audio>
+        <audio id="lowtom" src="sounds/lowtom.mp3"></audio>
+        <audio id="midtom" src="sounds/midtom.mp3"></audio>
+        <audio id="hightom" src="sounds/hightom.mp3"></audio>
+    </div>
+
+    <script>
+        const kick = document.getElementById('kick');
+        const snare = document.getElementById('snare');
+        const hihat = document.getElementById('hihat');
+        const openhat = document.getElementById('openhat');
+        const crash = document.getElementById('crash');
+        const ride = document.getElementById('ride');
+        const lowtom = document.getElementById('lowtom');
+        const midtom = document.getElementById('midtom');
+        const hightom = document.getElementById('hightom');
+
+        const brightColors = ['#39FF14', '#FF69B4', '#FF0000', '#52FFFF', '#D142FF', '#FFA500']; 
+
+
+        document.addEventListener('keydown', (event) => {
+            playSound(event.code);
+            handleButtonAnimation(event.code);
+        });
+
+        document.querySelectorAll('.pad').forEach(pad => {
+            pad.addEventListener('click', () => {
+                const key = pad.getAttribute('data-key');
+                playSound(key);
+                handleButtonAnimation(key);
+            });
+        });
+
+
+        function playSound(key) {
+            if (key === 'KeyG') {
+                kick.currentTime = 0;
+                kick.play();
+            } else if (key === 'KeyH') {
+                snare.currentTime = 0;
+                snare.play();
+            } else if (key === 'KeyJ') {
+                hihat.currentTime = 0;
+                hihat.play();
+            } else if (key === 'KeyM') {
+                openhat.currentTime = 0;
+                openhat.play();
+            } else if (key === 'KeyB') {
+                crash.currentTime = 0;
+                crash.play();
+            } else if (key === 'KeyN') {
+                ride.currentTime = 0;
+                ride.play();
+            } else if (key === 'KeyT') {
+                lowtom.currentTime = 0;
+                lowtom.play();
+            } else if (key === 'KeyY') {
+                midtom.currentTime = 0;
+                midtom.play();
+            } else if (key === 'KeyU') {
+                hightom.currentTime = 0;
+                hightom.play();
+            }
+        }
+
+
+        function getRandomColor() {
+            return brightColors[Math.floor(Math.random() * brightColors.length)];
+        }
+
+
+        function handleButtonAnimation(key) {
+            const pad = document.querySelector(`.pad[data-key="${key}"]`);
+            if (pad) {
+                const randomColor = getRandomColor();
+                pad.style.backgroundColor = randomColor;
+                setTimeout(() => {
+                    pad.style.backgroundColor = '#303030';
+                }, 100);
+            }
+        }
+    </script>
+</body>
+</html>
